@@ -70,18 +70,18 @@ uint32_t RotWord(uint32_t word) { return word << 8 | word >> 24; }
 
 uint32_t InvRotWord(uint32_t word) { return word << 24 | word >> 8; }
 
-uint8_t GMul(uint8_t multiplyBy, uint8_t singleByte) {
+uint8_t GMul(uint8_t a, uint8_t b) {
     uint8_t p = 0;
     for (int i = 0; i < 8; i++) {
-        if ((singleByte & 1) != 0) {
-            p ^= multiplyBy;
+        if ((b & 1) != 0) {
+            p ^= a;
         }
-        uint8_t hiBitSet = (multiplyBy & 0x80) != 0;
-        multiplyBy <<= 1;
+        uint8_t hiBitSet = (a & 0x80) != 0;
+        a <<= 1;
         if (hiBitSet) {
-            multiplyBy ^= 0x1b;
+            a ^= 0x1b;
         }
-        singleByte >>= 1;
+        b >>= 1;
     }
     return p;
 }
