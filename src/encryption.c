@@ -65,10 +65,10 @@ void DecryptString(char *string, char *key_string, char *buf) {
     uint32_t expanded_key[Nb * (Nr + 1)];
     KeyExpansion(key, expanded_key);
 
-    size_t encoded_len = strlen(string);
+    size_t len = Base64CalculateDecodedLen(string);
 
-    uint8_t ciphertext[encoded_len];
-    size_t len = Base64Decode(string, ciphertext);
+    uint8_t ciphertext[len];
+    Base64Decode(string, ciphertext);
 
     uint8_t plaintext[len];
     for (size_t i = 0; i < len; i += Nb * Nb) {
