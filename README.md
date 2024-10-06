@@ -1,6 +1,15 @@
 # AES Encryption in C
 
-This is a simple implementation of AES encryption in C, using ECB mode for educational and demonstration purposes. **It should not be used in production environments.**
+This is a simple implementation of AES encryption in C, using ECB mode for educational and demonstration purposes.
+
+⚠️ **DISCLAIMER** ⚠️
+
+This AES encryption implementation is **not secure** and should only be used for educational or demonstration purposes.
+
+- ⚠️ **Do not use this implementation in production** or for encrypting sensitive data. The use of ECB mode can lead to security vulnerabilities.
+- ⚠️ Providing an **incorrect key** or an **invalid ciphertext** may cause **undefined behavior** and produce incorrect or unintelligible results.
+
+Use at your own risk!
 
 ## Features
 - Encrypt and decrypt text using the AES algorithm in ECB mode.
