@@ -7,7 +7,7 @@
 #define Nk 4
 #define Nr 10
 
-void KeyExpansion(uint8_t key[Nb * Nb], uint32_t w[Nb * (Nr + 1)]);
+void KeyExpansion(uint8_t key[Nk * Nb], uint32_t w[Nb * (Nr + 1)]);
 
 void AddRoundKey(uint8_t state[Nb][Nb], uint32_t key[Nb]);
 

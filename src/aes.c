@@ -244,7 +244,7 @@ void InvCipher(uint8_t in[Nb * Nb], uint8_t out[Nb * Nb],
     }
 }
 
-void KeyExpansion(uint8_t key[Nb * Nb], uint32_t w[Nb * (Nr + 1)]) {
+void KeyExpansion(uint8_t key[Nk * Nb], uint32_t w[Nb * (Nr + 1)]) {
     for (int i = 0; i < Nk; i++) {
         BytesToWord(&key[i * 4], &w[i]);
     }
