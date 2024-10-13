@@ -1,5 +1,6 @@
 #include "../src/aes.h"
 #include <assert.h>
+#include <stddef.h>
 
 void TestKeyExpansion() {
     uint8_t key[Nk * Nb] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6,
@@ -17,7 +18,7 @@ void TestKeyExpansion() {
 
     KeyExpansion(key, w);
 
-    for (int i = 0; i < Nb * (Nr + 1); i++) {
+    for (size_t i = 0; i < Nb * (Nr + 1); i++) {
         assert(expkey[i] == w[i]);
     }
 }
@@ -34,8 +35,8 @@ void TestAddRoundKey() {
                                 {0x00, 0x00, 0x00, 0x00}};
     AddRoundKey(input, key);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -52,8 +53,8 @@ void TestSubBytes() {
                                 {0x65, 0x5e, 0x78, 0xdd}};
     SubBytes(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -70,8 +71,8 @@ void TestShiftRows() {
                                 {0xc6, 0xbc, 0x9d, 0x01}};
     ShiftRows(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -88,8 +89,8 @@ void TestMixColumns() {
                                 {0xbc, 0x9d, 0x01, 0xc6}};
     MixColumns(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -110,7 +111,7 @@ void TestCipher() {
     uint8_t output[Nb * Nb];
     Cipher(input, output, expkey);
 
-    for (int i = 0; i < Nb * Nb; i++) {
+    for (size_t i = 0; i < Nb * Nb; i++) {
         assert(output[i] == expected[i]);
     }
 }
@@ -126,8 +127,8 @@ void TestInvSubBytes() {
                                 {0xbc, 0x9d, 0xc1, 0xc9}};
     InvSubBytes(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -144,8 +145,8 @@ void TestInvShiftRows() {
                                 {0xbc, 0x9d, 0x01, 0xc6}};
     InvShiftRows(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -162,8 +163,8 @@ void TestInvMixColumns() {
                                 {0x45, 0x5c, 0x01, 0xc6}};
     InvMixColumns(input);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             assert(input[i][j] == expected[i][j]);
         }
     }
@@ -184,7 +185,7 @@ void TestInvCipher() {
     uint8_t output[Nb * Nb];
     InvCipher(input, output, expkey);
 
-    for (int i = 0; i < Nb * Nb; i++) {
+    for (size_t i = 0; i < Nb * Nb; i++) {
         assert(output[i] == expected[i]);
     }
 }

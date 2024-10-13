@@ -1,4 +1,5 @@
 #include "aes.h"
+#include <stddef.h>
 
 uint8_t SBox[] = {
     0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b,
@@ -72,7 +73,7 @@ uint32_t InvRotWord(uint32_t word) { return word << 24 | word >> 8; }
 
 uint8_t GMul(uint8_t a, uint8_t b) {
     uint8_t p = 0;
-    for (int i = 0; i < 8; i++) {
+    for (size_t i = 0; i < 8; i++) {
         if ((b & 1) != 0) {
             p ^= a;
         }
@@ -86,7 +87,7 @@ uint8_t GMul(uint8_t a, uint8_t b) {
     return p;
 }
 
-uint32_t Rcon(int index) {
+uint32_t Rcon(size_t index) {
     uint32_t constants[] = {0x01000000, 0x02000000, 0x04000000, 0x08000000,
                             0x10000000, 0x20000000, 0x40000000, 0x80000000,
                             0x1b000000, 0x36000000};
@@ -106,7 +107,7 @@ uint32_t SubWord(uint32_t word) {
 }
 
 void AddRoundKey(uint8_t state[Nb][Nb], uint32_t key[Nb]) {
-    for (int i = 0; i < Nb; i++) {
+    for (size_t i = 0; i < Nb; i++) {
         state[0][i] ^= (uint8_t)(key[i] >> 24);
         state[1][i] ^= (uint8_t)(key[i] >> 16);
         state[2][i] ^= (uint8_t)(key[i] >> 8);
@@ -115,16 +116,16 @@ void AddRoundKey(uint8_t state[Nb][Nb], uint32_t key[Nb]) {
 }
 
 void SubBytes(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             state[i][j] = SBox[state[i][j]];
         }
     }
 }
 
 void ShiftRows(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < i; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < i; j++) {
             uint32_t word;
             BytesToWord(state[i], &word);
             word = RotWord(word);
@@ -134,7 +135,7 @@ void ShiftRows(uint8_t state[Nb][Nb]) {
 }
 
 void MixColumns(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
+    for (size_t i = 0; i < Nb; i++) {
         uint8_t a = state[0][i];
         uint8_t b = state[1][i];
         uint8_t c = state[2][i];
@@ -151,15 +152,15 @@ void Cipher(uint8_t in[Nb * Nb], uint8_t out[Nb * Nb],
             uint32_t w[Nk * (Nr + 1)]) {
     uint8_t state[Nb][Nb];
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             state[j][i] = in[i * Nb + j];
         }
     }
 
     AddRoundKey(state, w);
 
-    for (int round = 1; round < Nr; round++) {
+    for (size_t round = 1; round < Nr; round++) {
         SubBytes(state);
         ShiftRows(state);
         MixColumns(state);
@@ -170,24 +171,24 @@ void Cipher(uint8_t in[Nb * Nb], uint8_t out[Nb * Nb],
     ShiftRows(state);
     AddRoundKey(state, &w[Nr * Nb]);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             out[i * Nb + j] = state[j][i];
         }
     }
 }
 
 void InvSubBytes(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             state[i][j] = InvSBox[state[i][j]];
         }
     }
 }
 
 void InvShiftRows(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < i; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < i; j++) {
             uint32_t word;
             BytesToWord(state[i], &word);
             word = InvRotWord(word);
@@ -197,7 +198,7 @@ void InvShiftRows(uint8_t state[Nb][Nb]) {
 }
 
 void InvMixColumns(uint8_t state[Nb][Nb]) {
-    for (int i = 0; i < Nb; i++) {
+    for (size_t i = 0; i < Nb; i++) {
         uint8_t a = state[0][i];
         uint8_t b = state[1][i];
         uint8_t c = state[2][i];
@@ -218,15 +219,15 @@ void InvCipher(uint8_t in[Nb * Nb], uint8_t out[Nb * Nb],
                uint32_t w[Nk * (Nr + 1)]) {
     uint8_t state[Nb][Nb];
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             state[j][i] = in[i * Nb + j];
         }
     }
 
     AddRoundKey(state, &w[Nr * Nb]);
 
-    for (int round = Nr - 1; round > 0; round--) {
+    for (size_t round = Nr - 1; round > 0; round--) {
         InvShiftRows(state);
         InvSubBytes(state);
         AddRoundKey(state, &w[round * Nb]);
@@ -237,19 +238,19 @@ void InvCipher(uint8_t in[Nb * Nb], uint8_t out[Nb * Nb],
     InvSubBytes(state);
     AddRoundKey(state, w);
 
-    for (int i = 0; i < Nb; i++) {
-        for (int j = 0; j < Nb; j++) {
+    for (size_t i = 0; i < Nb; i++) {
+        for (size_t j = 0; j < Nb; j++) {
             out[i * Nb + j] = state[j][i];
         }
     }
 }
 
 void KeyExpansion(uint8_t key[Nk * Nb], uint32_t w[Nb * (Nr + 1)]) {
-    for (int i = 0; i < Nk; i++) {
+    for (size_t i = 0; i < Nk; i++) {
         BytesToWord(&key[i * 4], &w[i]);
     }
 
-    for (int i = Nk; i < Nb * (Nr + 1); i++) {
+    for (size_t i = Nk; i < Nb * (Nr + 1); i++) {
         uint32_t temp = w[i - 1];
         if (i % Nk == 0) {
             temp = SubWord(RotWord(temp)) ^ Rcon(i / Nk - 1);
